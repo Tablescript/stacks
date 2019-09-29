@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-import api from './routes';
+import api from './api';
 
 const createApp = () => {
   const app = express();
@@ -16,7 +16,7 @@ const createApp = () => {
   app.use(express.static(path.join(__dirname, '../public')));
 
   // Routes
-  app.use('/', api());
+  app.use('/api', api());
 
   // Catch 404 and forward to error handler
   app.use((req, res, next) => {

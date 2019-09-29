@@ -1,6 +1,5 @@
 import { config } from 'dotenv';
-import express from 'express';
-import api from './api';
+import createApp from './app';
 
 config();
 
@@ -9,9 +8,9 @@ const {
 } = process.env;
 
 const run = () => {
-  const app = express();
-  app.use(api);
-  app.listen(PORT, () => console.log(`Listening on port ${PORT}`)); // eslint-disable-line no-console
+  createApp().listen(PORT, () => {
+    console.log(`Listening on port ${PORT}`);
+  }); // eslint-disable-line no-console
 };
 
 run();
