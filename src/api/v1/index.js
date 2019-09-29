@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import fs from 'fs';
 
 const buildBundle = (version, dependencies = {}) => ({
   version,
@@ -78,11 +79,14 @@ export default () => {
   routes.get('/bundles/:name/manifest', (req, res) => {
     res.json(repo[req.params.name].manifest);
   });
-  routes.get('/bundles/:name/releases/:version', (req, res) => {
-    const { name, version } = req.params;
-    const fileToSend = `${repoRoot}/${name}/${name}-${version}.tgz`;
-    console.log(`Sending ${fileToSend}...`);
-    res.sendFile(fileToSend);
+  routes.get('/bundles/:name/-/:filename', (req, res) => {
+    const { name, filename } = req.params;
+    const fileToSend = `${repoRoot}/${name}/${filename}`;
+    const readStream = fs.createReadStream(fileToSend);
+    res.status(200);
+    res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Content-Type', 'application/gzip');
+    readStream.pipe(res);
   });
 
   return routes;
