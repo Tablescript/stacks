@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import fs from 'fs';
+import { Storage } from '@google-cloud/storage';
 
 const buildBundle = (version, dependencies = {}) => ({
   version,
@@ -71,22 +72,34 @@ const repo = {
   ),
 };
 
-const repoRoot = '/Users/jamie/src/tablescript/js/stacks/repo';
-
-export default () => {
+export default (gcsBucket) => {
   const routes = Router();
 
   routes.get('/bundles/:name/manifest', (req, res) => {
     res.json(repo[req.params.name].manifest);
   });
-  routes.get('/bundles/:name/-/:filename', (req, res) => {
+
+  routes.get('/bundles/:name/-/:filename', (req, res, next) => {
     const { name, filename } = req.params;
-    const fileToSend = `${repoRoot}/${name}/${filename}`;
-    const readStream = fs.createReadStream(fileToSend);
+
+    const storage = new Storage();
+    const bucket = storage.bucket(gcsBucket);
+    const file = bucket.file(`${name}/${filename}`);
+    
     res.status(200);
     res.setHeader('Content-disposition', `attachment; filename="${filename}"`);
     res.setHeader('Content-Type', 'application/gzip');
-    readStream.pipe(res);
+
+    try {
+      const reader = file.createReadStream();
+      reader.on('error', e => {
+        throw new Error(e);
+      });
+
+      reader.pipe(res);
+    } catch (e) {
+      next(e);
+    }
   });
 
   return routes;

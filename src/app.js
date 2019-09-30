@@ -4,7 +4,7 @@ import logger from 'morgan';
 import bodyParser from 'body-parser';
 import api from './api';
 
-const createApp = () => {
+const createApp = (gcsBucket) => {
   const app = express();
   app.disable('x-powered-by');
 
@@ -16,7 +16,7 @@ const createApp = () => {
   app.use(express.static(path.join(__dirname, '../public')));
 
   // Routes
-  app.use('/api', api());
+  app.use('/api', api(gcsBucket));
 
   // Catch 404 and forward to error handler
   app.use((req, res, next) => {

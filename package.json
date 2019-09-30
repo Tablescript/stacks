@@ -15,6 +15,7 @@
     "@babel/core": "^7.6.2",
     "@babel/plugin-proposal-object-rest-spread": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
+    "@google-cloud/storage": "^3.3.0",
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "^4.17.1",
