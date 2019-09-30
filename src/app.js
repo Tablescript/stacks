@@ -27,9 +27,10 @@ const createApp = () => {
 
   // Error handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+    console.log(`Error: ${err.message}`);
     res
       .status(err.status || 500)
-      .render('error', {
+      .json({
         message: err.message,
       });
   });
