@@ -10,8 +10,8 @@ const {
 
 const run = () => {
   createApp(GCS_BUCKET).listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-  }); // eslint-disable-line no-console
+    console.log(`Listening on port ${PORT}`); // eslint-disable-line no-console
+  });
 };
 
 run();

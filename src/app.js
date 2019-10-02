@@ -27,7 +27,7 @@ const createApp = (gcsBucket) => {
 
   // Error handler
   app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
-    console.log(`Error: ${err.message}`);
+    console.log(`Error: ${err.message}`); // eslint-disable-line no-console
     res
       .status(err.status || 500)
       .json({
